@@ -129,7 +129,7 @@ def get_error(predictions,real):
         tot_err += np.mean(np.power(real[it]-predictions[it], 2))
     return tot_err
 
-def bla(z,x,y,w,o,p,lines1,lines2,lines3,lines4,batches,alpha):
+def bla(z,x,y,w,o,p,lines1,lines2,lines3,lines4,batches,alpha,epochs):
     x_test,y_test = load_data(lines3,lines4)
     build_levels(z,x,y,w,o,p)
     bat_size = math.floor(len(lines1)/batches)
@@ -138,7 +138,7 @@ def bla(z,x,y,w,o,p,lines1,lines2,lines3,lines4,batches,alpha):
     for item in range(batches):
         end = counter + bat_size
         x_train, y_train = load_data(lines1[counter:end],lines2[counter:end])
-        train(x_train, y_train, alpha, epochs=10)
+        train(x_train, y_train, alpha, epochs)
         counter = counter + bat_size
     train_time = time.time()-start_time
     x_test,y_test = load_data(lines3,lines4)
@@ -147,35 +147,35 @@ def bla(z,x,y,w,o,p,lines1,lines2,lines3,lines4,batches,alpha):
     error = str(error)+","+str(train_time)
     return error
 
-def run_model(lines1,lines2,lines3,lines4,it,batches,alpha):
+def run_model(lines1,lines2,lines3,lines4,it,batches,alpha,epochs):
     results = {}
-    key = it+"-"+str(1)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
-    error = bla(1,0,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha)
+    key = it+"-"+str(1)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+    error = bla(1,0,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
     print("With: ",key," error: ",error)
     results[key]=error
     for i in range(1,6):
-        key = it+"-"+str(2)+"-"+str(i)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
-        error = bla(2,i,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha)
+        key = it+"-"+str(2)+"-"+str(i)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+        error = bla(2,i,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
         print("With: ",key," error: ",error)
         results[key]=error
         for j in range(1,6):
-            key = it+"-"+str(3)+"-"+str(i)+"-"+str(j)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
-            error = bla(3,i,j,0,0,0,lines1,lines2,lines3,lines4,batches,alpha)
+            key = it+"-"+str(3)+"-"+str(i)+"-"+str(j)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+            error = bla(3,i,j,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
             print("With: ",key," error: ",error)
             results[key]=error
             for k in range(1,6):
-                key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
-                error = bla(4,i,j,k,0,0,lines1,lines2,lines3,lines4,batches,alpha)
+                key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+                error = bla(4,i,j,k,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
                 print("With: ",key," error: ",error)
                 results[key]=error
                 for o in range(1,6):
-                    key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
-                    error = bla(5,i,j,k,o,0,lines1,lines2,lines3,lines4,batches,alpha)
+                    key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+                    error = bla(5,i,j,k,o,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
                     print("With: ",key," error: ",error)
                     results[key]=error
                     for p in range(1,6):
-                        key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(p)+"-"+str(batches)+"-"+str(alpha)
-                        error = bla(6,i,j,k,o,p,lines1,lines2,lines3,lines4,batches,alpha)
+                        key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(p)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+                        error = bla(6,i,j,k,o,p,lines1,lines2,lines3,lines4,batches,alpha,epochs)
                         print("With: ",key," error: ",error)
                         results[key]=error
     text_file = open("results.csv", "a")
@@ -198,15 +198,24 @@ for it in files:
     with open(test_labels,'r') as i:
         lines4 = i.readlines()
 
-    run_model(lines1,lines2,lines3,lines4,it,10,0.1)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.01)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.001)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.2)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.02)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.002)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.3)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.03)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.003)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.1,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.1,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.2,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.2,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.02,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.02,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.002,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.002,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.3,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.3,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.03,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.03,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.003,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.003,100)
 
 exit()
 
