@@ -153,27 +153,27 @@ def run_model(lines1,lines2,lines3,lines4,it,batches,alpha):
     error = bla(1,0,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha)
     print("With: ",key," error: ",error)
     results[key]=error
-    for i in range(1,4):
+    for i in range(1,6):
         key = it+"-"+str(2)+"-"+str(i)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
         error = bla(2,i,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha)
         print("With: ",key," error: ",error)
         results[key]=error
-        for j in range(1,4):
+        for j in range(1,6):
             key = it+"-"+str(3)+"-"+str(i)+"-"+str(j)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
             error = bla(3,i,j,0,0,0,lines1,lines2,lines3,lines4,batches,alpha)
             print("With: ",key," error: ",error)
             results[key]=error
-            for k in range(1,4):
+            for k in range(1,6):
                 key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
                 error = bla(4,i,j,k,0,0,lines1,lines2,lines3,lines4,batches,alpha)
                 print("With: ",key," error: ",error)
                 results[key]=error
-                for o in range(1,4):
+                for o in range(1,6):
                     key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)
                     error = bla(5,i,j,k,o,0,lines1,lines2,lines3,lines4,batches,alpha)
                     print("With: ",key," error: ",error)
                     results[key]=error
-                    for p in range(1,4):
+                    for p in range(1,6):
                         key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(p)+"-"+str(batches)+"-"+str(alpha)
                         error = bla(6,i,j,k,o,p,lines1,lines2,lines3,lines4,batches,alpha)
                         print("With: ",key," error: ",error)
