@@ -8,7 +8,7 @@ test_data = arguments[3]
 levels = []
 loss = None
 loss_prime = None
-
+files = ['circle','gaussian','spiral','xor']
 
 class FClevel():
     def __init__(self, input_size, output_size):
@@ -51,11 +51,15 @@ def predict( vals):
         result.append(output)
     return result
 
-def load_data():
-    with open(train_data,'r') as i:
+def load_data(train_data_file,train_label_file,test_data,test_labels):
+    with open(train_data_file,'r') as i:
         lines = i.readlines()
-    with open(train_labels,'r') as i:
+    with open(train_label_file,'r') as i:
         lines2 = i.readlines()
+    with open(test_data,'r') as i:
+        lines3 = i.readlines()
+    with open(test_labels,'r') as i:
+        lines4 = i.readlines()
     tr_arr = []
     tr_lbs_arr = []
     for it in range(len(lines)):
@@ -64,7 +68,15 @@ def load_data():
         tr_lbs_arr.append([[float(lines2[it].replace("\n",""))]])
     x_train = np.array(tr_arr)
     y_train = np.array(tr_lbs_arr)
-    return x_train,y_train
+    tr_arr = []
+    tr_lbs_arr = []
+    for it in range(len(lines3)):
+        tup = lines3[it].replace("\n","").split(",")
+        tr_arr.append([[float(tup[0]),float(tup[1])]])
+        tr_lbs_arr.append([[float(lines4[it].replace("\n",""))]])
+    x_test = np.array(tr_arr)
+    y_test = np.array(tr_lbs_arr)
+    return x_train,y_train,x_test,y_test
 
 def train( x_train, y_train, epochs, alpha):
     data_s = len(x_train)
@@ -84,17 +96,44 @@ def train( x_train, y_train, epochs, alpha):
 # training data
 x_train = np.array([[[0,0]], [[0,1]], [[1,0]], [[1,1]]])
 y_train = np.array([[[0]], [[1]], [[1]], [[0]]])
-x_train, y_train = load_data()
+#x_train, y_train = load_data(train_data,train_labels)
 # network
+def build_levels(z,x,y,w):
+    global levels
+    levels = []
+    if z == 1:
+        levels.append(FClevel(2, 1))
+    elif z ==2:
+        levels.append(FClevel(2, x))
+        levels.append(FClevel(x, 1))
+    elif z ==3:
+        levels.append(FClevel(3, x))
+        levels.append(FClevel(x, y))
+        levels.append(FClevel(y, 1))
+    elif z == 3:
+        levels.append(FClevel(3, w))
+        levels.append(FClevel(w, x))
+        levels.append(FClevel(x, y))
+        levels.append(FClevel(y, 1))
+        
+def run_model():
+    for it in files:
+        train_file = it+"_train_data.csv"
+        train_labels = it+"_train_label.csv"
+        test_labels = it+"_test_data.csv"
+        test_data = it+"_test_label.csv"
+        x_train, y_train = load_data(train_file,train_labels,test_data,test_labels)
+        build_levels(1,0,0,0)
+        train(x_train, y_train, epochs=10, alpha=0.1)
+        out = predict(x_train)
+        for i in range(4):
 
-levels.append(FClevel(2, 3))
-levels.append(FClevel(3, 1))
+            for j in range(4):
+                for k in range(4):
+                    for l in range(4):
+                        build_levels()
 
-# train
-train(x_train, y_train, epochs=10, alpha=0.1)
 
-# test
-out = predict(x_train)
 text_file = open("test_predictions.csv", "w")
 for it in out:
     val = str(it[0][0])+"\n"
