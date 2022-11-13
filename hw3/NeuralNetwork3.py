@@ -168,16 +168,16 @@ def run_model(lines1,lines2,lines3,lines4,it,batches,alpha,epochs):
                 error = bla(4,i,j,k,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
                 print("With: ",key," error: ",error)
                 results[key]=error
-                for o in range(1,6):
-                    key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
-                    error = bla(5,i,j,k,o,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
-                    print("With: ",key," error: ",error)
-                    results[key]=error
-                    for p in range(1,6):
-                        key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(p)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
-                        error = bla(6,i,j,k,o,p,lines1,lines2,lines3,lines4,batches,alpha,epochs)
-                        print("With: ",key," error: ",error)
-                        results[key]=error
+                #for o in range(1,6):
+                    #key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+                    #error = bla(5,i,j,k,o,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
+                    #print("With: ",key," error: ",error)
+                    #results[key]=error
+                    #for p in range(1,6):
+                        #key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(o)+"-"+str(p)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
+                        #error = bla(6,i,j,k,o,p,lines1,lines2,lines3,lines4,batches,alpha,epochs)
+                        #print("With: ",key," error: ",error)
+                        #results[key]=error
     text_file = open("results.csv", "a")
     for it in results:
         val = str(it)+","+str(results[it])+"\n"
