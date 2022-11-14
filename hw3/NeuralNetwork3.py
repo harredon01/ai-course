@@ -10,7 +10,7 @@ test_data = arguments[3]
 levels = []
 loss = None
 loss_prime = None
-files = ['circle','gaussian','spiral','xor']
+files = ['spiral','circle','gaussian','xor']
 
 class FClevel():
     def __init__(self, input_size, output_size):
@@ -149,16 +149,12 @@ def bla(z,x,y,w,o,p,lines1,lines2,lines3,lines4,batches,alpha,epochs):
 
 def run_model(lines1,lines2,lines3,lines4,it,batches,alpha,epochs):
     results = {}
-    key = it+"-"+str(1)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
-    error = bla(1,0,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
-    print("With: ",key," error: ",error)
-    results[key]=error
     for i in range(1,6):
         key = it+"-"+str(2)+"-"+str(i)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
         error = bla(2,i,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
         print("With: ",key," error: ",error)
         results[key]=error
-        for j in range(1,6):
+        for j in range(3,6):
             key = it+"-"+str(3)+"-"+str(i)+"-"+str(j)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
             error = bla(3,i,j,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
             print("With: ",key," error: ",error)
@@ -198,23 +194,18 @@ for it in files:
     with open(test_labels,'r') as i:
         lines4 = i.readlines()
 
-    run_model(lines1,lines2,lines3,lines4,it,10,0.1,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.1,100)
+
     run_model(lines1,lines2,lines3,lines4,it,10,0.01,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.001,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.001,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.2,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.2,100)
     run_model(lines1,lines2,lines3,lines4,it,10,0.02,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.02,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.002,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.002,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.3,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.3,100)
     run_model(lines1,lines2,lines3,lines4,it,10,0.03,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.03,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.002,10)
     run_model(lines1,lines2,lines3,lines4,it,10,0.003,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.02,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.002,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.03,100)
     run_model(lines1,lines2,lines3,lines4,it,10,0.003,100)
 
 exit()
