@@ -186,10 +186,10 @@ for it in files:
         lines4 = i.readlines()
 
 
-    run_model(lines1,lines2,lines3,lines4,it,40,0.01,10)
-    run_model(lines1,lines2,lines3,lines4,it,40,0.001,10)
-    run_model(lines1,lines2,lines3,lines4,it,40,0.01,100)
-    run_model(lines1,lines2,lines3,lines4,it,40,0.001,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,40)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,40)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,100)
 
 exit()
 epochs=100
