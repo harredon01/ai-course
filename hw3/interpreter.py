@@ -35,7 +35,7 @@ def read_results():
 
     text_file = open("agregated.csv", "w")
     for it in results:
-        val = it+","+str(results[it]/results_counts[key])+","+str(results[it]/results_counts[key])+"\n"
+        val = it+","+str(results[it]/results_counts[key])+","+str(results_counts[key])+"\n"
         n = text_file.write(val)
     text_file.close()
 read_results()
