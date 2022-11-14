@@ -8,8 +8,6 @@ train_labels = arguments[2]
 test_data = arguments[3]
 
 levels = []
-loss = None
-loss_prime = None
 files = ['spiral','circle','gaussian','xor']
 
 class FClevel():
@@ -19,15 +17,18 @@ class FClevel():
 
 
     def f_prop(self, vals):
-        self.input = vals
-        self.output = np.dot(self.input, self.weights) + self.bias
-        self.input_a = self.output
-        self.output_a = np.tanh(self.input_a)
-
-        #self.output = np.exp(self.output)/np.sum(np.exp(self.output),axis=0)
+        try:
+            self.input = vals
+            self.output = np.dot(self.input, self.weights) + self.bias
+        except:
+            print("Error in weights")
+        try:
+            self.input_a = self.output
+            self.output_a = np.tanh(self.input_a)
+        except:
+            print("Error in acum")
         return self.output_a 
 
-    # computes dE/dW, dE/dB for a given output_error=dE/dY. Returns input_error=dE/dX.
     def b_prop(self, output_error, alpha):
         #loss=-np.sum(y*np.log(output_error))
         #output_error = loss/float(output_error.shape[0])
@@ -35,9 +36,6 @@ class FClevel():
 
         input_error = np.dot(output_error, self.weights.T)
         weights_error = np.dot(self.input.T, output_error)
-        # dBias = output_error
-
-        # update parameters
         self.weights -= alpha * weights_error
         self.bias -= alpha * output_error
         return input_error
@@ -58,7 +56,6 @@ def load_data(lines,lines2):
     tr_lbs_arr = []
     for it in range(len(lines)):
         tup = lines[it].replace("\n","").split(",")
-        #tr_arr.append([[float(tup[0]),float(tup[1])]])
         try:
             tr_arr.append([[float(tup[0]),float(tup[1])]])
             tr_lbs_arr.append([[float(lines2[it].replace("\n",""))]])
@@ -85,13 +82,7 @@ def train( x_train, y_train, alpha, epochs):
             for level in reversed(levels):
                 error = level.b_prop(error, alpha)
         tot_err /= data_s
-        #print('epoch %d/%d   error=%f' % (i+1, epochs, tot_err))
 
-# training data
-x_train = np.array([[[0,0]], [[0,1]], [[1,0]], [[1,1]]])
-y_train = np.array([[[0]], [[1]], [[1]], [[0]]])
-#x_train, y_train = load_data(train_data,train_labels)
-# network
 def build_levels(z,x,y,w,o,p):
     global levels
     levels = []
@@ -149,17 +140,17 @@ def bla(z,x,y,w,o,p,lines1,lines2,lines3,lines4,batches,alpha,epochs):
 
 def run_model(lines1,lines2,lines3,lines4,it,batches,alpha,epochs):
     results = {}
-    for i in range(1,6):
+    for i in range(1,7):
         key = it+"-"+str(2)+"-"+str(i)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
         error = bla(2,i,0,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
         print("With: ",key," error: ",error)
         results[key]=error
-        for j in range(3,6):
+        for j in range(3,7):
             key = it+"-"+str(3)+"-"+str(i)+"-"+str(j)+"-"+str(0)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
             error = bla(3,i,j,0,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
             print("With: ",key," error: ",error)
             results[key]=error
-            for k in range(1,6):
+            for k in range(1,7):
                 key = it+"-"+str(4)+"-"+str(i)+"-"+str(j)+"-"+str(k)+"-"+str(0)+"-"+str(0)+"-"+str(batches)+"-"+str(alpha)+"-"+str(epochs)
                 error = bla(4,i,j,k,0,0,lines1,lines2,lines3,lines4,batches,alpha,epochs)
                 print("With: ",key," error: ",error)
@@ -195,21 +186,18 @@ for it in files:
         lines4 = i.readlines()
 
 
-    run_model(lines1,lines2,lines3,lines4,it,10,0.01,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.02,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.03,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.001,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.002,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.003,10)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.001,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.02,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.002,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.03,100)
-    run_model(lines1,lines2,lines3,lines4,it,10,0.003,100)
+    run_model(lines1,lines2,lines3,lines4,it,40,0.01,10)
+    run_model(lines1,lines2,lines3,lines4,it,40,0.001,10)
+    run_model(lines1,lines2,lines3,lines4,it,40,0.01,100)
+    run_model(lines1,lines2,lines3,lines4,it,40,0.001,100)
 
 exit()
-
+epochs=100
+z=1
+x=1
+y=1
+w=1
+batches=10
 with open(train_data,'r') as i:
     lines1 = i.readlines()
 with open(train_labels,'r') as i:
@@ -217,13 +205,14 @@ with open(train_labels,'r') as i:
 with open(test_data,'r') as i:
     lines3 = i.readlines()
 alpha=0.1
-build_levels(z,x,y,x)
+build_levels(z,x,y,w)
 bat_size = math.floor(len(lines1)/batches)
 counter = 0
+start_time = time.time()
 for item in range(batches):
     end = counter + bat_size
     x_train, y_train = load_data(lines1[counter:end],lines2[counter:end])
-    train(x_train, y_train, alpha, epochs=10)
+    train(x_train, y_train, alpha, epochs)
     counter = counter + bat_size
 x_test,y_test = load_data(lines3,lines3)
 out = predict(x_test)
