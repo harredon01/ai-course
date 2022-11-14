@@ -18,13 +18,13 @@ def read_results():
         score = float(cont[1])
         if "circle" in cont[0]:
             key = cont[0].replace("circle-","")
-        elif "gaussian":
+        elif "gaussian" in cont[0]:
             key = cont[0].replace("gaussian-","")
             score *=2
-        elif "xor":
+        elif "xor" in cont[0]:
             score *=1.5
             key = cont[0].replace("xor-","")
-        elif "spiral":
+        elif "spiral" in cont[0]:
             key = cont[0].replace("spiral-","")
         if key in results:
             results[key] += score
