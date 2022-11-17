@@ -48,7 +48,10 @@ def predict( vals):
         output = vals[i]
         for level in levels:
             output = level.f_prop(output)
-        result.append(output)
+        if output < 0.5:
+            result.append(0)
+        else:
+            result.append(1)
     return result
 
 def load_data(lines,lines2):
@@ -58,7 +61,8 @@ def load_data(lines,lines2):
         tup = lines[it].replace("\n","").split(",")
         try:
             tr_arr.append([[float(tup[0]),float(tup[1])]])
-            tr_lbs_arr.append([[float(lines2[it].replace("\n",""))]])
+            if len(lines2)>it:
+                tr_lbs_arr.append([[float(lines2[it].replace("\n",""))]])
         except:
             print("ERROR")
             print(tup)
@@ -171,6 +175,7 @@ def run_model(lines1,lines2,lines3,lines4,it,batches,alpha,epochs):
         text_file.write(val)
     text_file.close()
 
+
 for it in files:
     train_file = it+"_train_data.csv"
     train_labels = it+"_train_label.csv"
@@ -185,7 +190,14 @@ for it in files:
     with open(test_labels,'r') as i:
         lines4 = i.readlines()
 
-
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,40)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,40)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,100)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.01,10)
+    run_model(lines1,lines2,lines3,lines4,it,10,0.001,10)
     run_model(lines1,lines2,lines3,lines4,it,10,0.01,40)
     run_model(lines1,lines2,lines3,lines4,it,10,0.001,40)
     run_model(lines1,lines2,lines3,lines4,it,10,0.01,100)
@@ -193,11 +205,13 @@ for it in files:
 
 exit()
 epochs=100
-z=1
-x=1
+z=3
+x=5
 y=1
-w=1
-batches=10
+w=0
+batches=100
+alpha = 0.001
+print("Test data: ",test_data)
 with open(train_data,'r') as i:
     lines1 = i.readlines()
 with open(train_labels,'r') as i:
@@ -205,7 +219,7 @@ with open(train_labels,'r') as i:
 with open(test_data,'r') as i:
     lines3 = i.readlines()
 alpha=0.1
-build_levels(z,x,y,w)
+build_levels(z,x,y,w,0,0)
 bat_size = math.floor(len(lines1)/batches)
 counter = 0
 start_time = time.time()
@@ -214,11 +228,19 @@ for item in range(batches):
     x_train, y_train = load_data(lines1[counter:end],lines2[counter:end])
     train(x_train, y_train, alpha, epochs)
     counter = counter + bat_size
-x_test,y_test = load_data(lines3,lines3)
+print("22222222222")
+x_test,y_test = load_data(lines3,lines2)
+print("sdfsdfsdf")
+print(len(x_test))
 out = predict(x_test)
+print(len(out))
 text_file = open("test_predictions.csv", "w")
 for it in out:
-    val = str(it[0][0])+"\n"
+    val = str(it)+"\n"
     n = text_file.write(val)
 text_file.close()
-print(out)
+exit()
+
+
+
+
