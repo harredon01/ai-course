@@ -7,7 +7,7 @@ levels = []
 files = ['spiral','circle','gaussian','xor']
 
 
-def read_results(train_file):
+def read_results(train_file,results_count,sorting_key):
     results = {}
     results_counts = {}
 
@@ -46,11 +46,11 @@ def read_results(train_file):
         item['avg']=results[it]/results_counts[key]
         item['counter'] = results_counts[it]
         finals.append(item)
-    finals.sort(key=lambda x: x['avg'], reverse=False)
-    for it in range(10):
+    finals.sort(key=lambda x: x[sorting_key], reverse=False)
+    print('key-------------------','avg','score','counter')
+    for it in range(results_count):
         i = finals[it]
         print(i['key'],i['avg'],i['score'],i['counter'])
     text_file.close()
 
-train_file = "results171.csv"
-read_results(train_file)
+read_results(arguments[1],int(arguments[2]),arguments[3])
