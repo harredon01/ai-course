@@ -1,7 +1,7 @@
 import math 
 import random
 import time
-input_logs = "input2.txt"
+input_logs = "input2.txt" 
 cities = []
 with open(input_logs,'r') as i:
     lines = i.readlines()
